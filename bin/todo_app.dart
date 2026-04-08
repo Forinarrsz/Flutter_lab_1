@@ -16,13 +16,18 @@
 import 'dart:io';
 import 'package:todo_app/todo.dart';
 import 'package:todo_app/todo_repository.dart';
+import 'package:ansicolor/ansicolor.dart';
 
+final AnsiPen greenPen = AnsiPen()..green();
+final AnsiPen redPen = AnsiPen()..red();
+final AnsiPen bluePen = AnsiPen()..blue();
+final AnsiPen yellowPen = AnsiPen()..yellow();
 void main() {
   TodoRepository repo = TodoRepository();
   printMenu();
   while (true) {
     stdout.write("> ");
-    String input = stdin.readByteSync();
+    String? input = stdin.readLineSync();
     if (input == null) {
       continue;
     }
@@ -38,9 +43,9 @@ void main() {
 }
 
 void printMenu() {
-  print('Console app TODO');
+  print(yellowPen('Console app TODO'));
   print('commands:');
-  print('add <text>');\
+  print('add <text>');
   print('list');
   print('done <id>');
   print('delete <id>');
@@ -64,14 +69,13 @@ void listCommand(TodoRepository repo) {
     print('todo is empty');
     return;
   }
-  for (var todo in todos){
+  for (var todo in todos) {
     print(todo);
   }
 }
 
 void doneCommand(TodoRepository repo, List<String> parts) {
-  if (parts.length < 2)
-  {
+  if (parts.length < 2) {
     print('error: enter id');
     return;
   }
@@ -79,10 +83,9 @@ void doneCommand(TodoRepository repo, List<String> parts) {
   repo.complete(id);
   print('task done');
 }
+
 void deleteCommand(TodoRepository repo, List<String> parts) {
-  
-  if (parts.length < 2)
-  {
+  if (parts.length < 2) {
     print('error: enter id');
     return;
   }
@@ -96,26 +99,28 @@ bool handleCommand(TodoRepository repo, String input) {
   String command = parts[0].toLowerCase();
 
   try {
-    switch(command) {
+    switch (command) {
       case "add":
-      addCommand(repo, input);
-      break;
+        addCommand(repo, input);
+        break;
       case "list":
-      listCommand(repo);
-      break;
+        listCommand(repo);
+        break;
       case "done":
-      doneCommand(repo, parts);
-      break;
+        doneCommand(repo, parts);
+        break;
       case "delete":
-      deleteCommand(repo, parts);
-      break;
+        deleteCommand(repo, parts);
+        break;
       case "exit":
-      print("exit");
-      return true;
+        print("exit");
+        return true;
       default:
-      print('not found');
+        print('not found');
     }
   } catch (e) {
-    print("error: $e");
-  } return false;
+    print(redPen("error: $e"));
+  }
+  return false;
 }
+

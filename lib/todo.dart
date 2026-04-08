@@ -5,6 +5,7 @@ class Todo {
   static int _counter = 0;
   Todo(this.title) : id = ++_counter, isDone = false;
 
+
   @override
   String toString() {
     String status;
